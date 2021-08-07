@@ -10,7 +10,7 @@ var userConnectedTo = {};
 //when a user connects to our sever 
 wss.on('connection', function(connection) {
   
-   console.log("User connected. Current connections: " + Object.keys(users).length);
+   console.log("User connected. Current connections: ", Object.keys(users).length);
 	
    //when server gets a message from a connected user
    connection.on('message', function(message) { 
@@ -29,8 +29,7 @@ wss.on('connection', function(connection) {
          //when a user tries to login 
 			
          case "login": 
-            console.log("User logged in: ", data.source); 
-			
+
 				
             //if anyone is logged in with this username then refuse 
             if(users[data.source]) { 
@@ -38,6 +37,7 @@ wss.on('connection', function(connection) {
                   type: "login", 
                   success: false 
                }); 
+	       console.log("Login attempt for user: ", data.source, " denied (duplicate). Current connections: ", Object.keys(users).length); 
             } else { 
                //save user connection on the server 
                users[data.source] = connection; 
@@ -48,6 +48,7 @@ wss.on('connection', function(connection) {
                   type: "login", 
                   success: true 
                }); 
+	       console.log("Login attempt for user: ", data.source, " successful. Current connections: ", Object.keys(users).length); 
             } 
 				
             break; 
