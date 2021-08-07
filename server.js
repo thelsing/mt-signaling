@@ -10,7 +10,7 @@ var userConnectedTo = {};
 //when a user connects to our sever 
 wss.on('connection', function(connection) {
   
-   console.log("User connected");
+   console.log("User connected. Current connections: " + Object.keys(users).length);
 	
    //when server gets a message from a connected user
    connection.on('message', function(message) { 
@@ -113,22 +113,13 @@ wss.on('connection', function(connection) {
    //when user exits, for example closes a browser window 
    //this may help if we are still in "offer","answer" or "candidate" state 
    connection.on("close", function() { 
-
-      if(connection.name) { 
+	
+      if(connection.name) {       
         delete users[connection.name]; 
-/*		
-        if(connection.otherName) { 
-            console.log("Disconnecting from ", connection.otherName);
-            var conn = users[connection.otherName]; 
-            conn.otherName = null;  
-				
-            if(conn != null) { 
-               sendTo(conn, { 
-                  type: "leave" 
-               });
-            }  
-         }*/ 
-      } 
+	console.log("User disconnected: ", connection.name, " Current connections: ", Object.keys(users).length);
+      } else {
+	console.log("unknown User disconnected.  Current connections: ", Object.keys(users).length);
+      }
    });  
 });  
 
